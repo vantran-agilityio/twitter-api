@@ -7,7 +7,6 @@
     "esModuleInterop": true,                            
     "forceConsistentCasingInFileNames": true,
     "strict": true,                                      
-    "types": ["node", "express"], 
     "baseUrl": "./src",
     "paths": {
       "@configs": ["./configs/index.ts"],
