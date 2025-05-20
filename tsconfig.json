@@ -9,10 +9,6 @@
     "skipLibCheck": true,
     "strict": true,                                      
     "baseUrl": "./src",
-    "types": ["node", "express"], // explicitly include node and express types
-    "typeRoots": [
-      "./node_modules/@types" // ensure TypeScript looks for types here
-    ],
     "paths": {
       "@configs": ["./configs/index.ts"],
       "@constants": ["./constants/index.ts"],
