@@ -50,14 +50,16 @@ This template provides a solid foundation for building scalable and maintainable
 ## Project Structure
 
 ```
+├── public/
 └── src/
+    ├── configs/
     ├── constants/
+    ├── libs/
     ├── models/
     ├── routes/
-    ├── controllers/
     ├── middlewares/
     ├── services/
-    ├── public/
+    ├── tests/
     └── utils/
 ```
 
