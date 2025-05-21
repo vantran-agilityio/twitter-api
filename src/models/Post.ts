@@ -1,13 +1,26 @@
+import {
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+} from 'sequelize';
+
 import { sequelize } from '@configs';
-import { DataTypes } from 'sequelize';
-import { User } from './User';
-import { PostModel } from '@types';
+
+export interface PostModel
+  extends Model<
+    InferAttributes<PostModel>,
+    InferCreationAttributes<PostModel>
+  > {
+  id: string;
+  title: string;
+  userId: string;
+}
 
 export const Post = sequelize.define<PostModel>('Post', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
-    autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
@@ -22,8 +35,4 @@ export const Post = sequelize.define<PostModel>('Post', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-});
-
-Post.belongsTo(User, {
-  targetKey: 'userId',
 });

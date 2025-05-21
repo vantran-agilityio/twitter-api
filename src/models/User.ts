@@ -1,14 +1,27 @@
-import { DataTypes } from 'sequelize';
-
+import {
+  DataTypes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+} from 'sequelize';
 import { sequelize } from '@configs';
-import { UserModel } from '@types';
-import { Post } from './Post';
+
+export interface UserModel
+  extends Model<
+    InferAttributes<UserModel>,
+    InferCreationAttributes<UserModel>
+  > {
+  id: CreationOptional<number>;
+  name: string;
+  email: string;
+  password: string;
+}
 
 export const User = sequelize.define<UserModel>('user', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
-    autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
@@ -35,12 +48,4 @@ export const User = sequelize.define<UserModel>('user', {
       notEmpty: true,
     },
   },
-  postId: {
-    type: DataTypes.ARRAY,
-    allowNull: true,
-  },
-});
-
-User.hasMany(Post, {
-  foreignKey: 'userId',
 });

@@ -4,7 +4,7 @@ export const appConfig = {
   password: '',
   params: {
     dialect: 'sqlite',
-    storage: 'ntask.sqlite',
+    storage: 'twitter.sqlite',
     define: {
       underscored: true,
     },
