@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { UserService } from '@types';
+import { authenticate } from 'auth';
 
 export const userRouter = ({
   app,
@@ -9,4 +10,8 @@ export const userRouter = ({
   app: express.Application;
   userService: UserService;
 }) =>
-  app.route('/user').get(userService.fetchUsers).post(userService.createUser);
+  app
+    .route('/user')
+    .all(authenticate())
+    .get(userService.fetchUsers)
+    .post(userService.createUser);

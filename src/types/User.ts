@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { User } from '@models';
 
 export type UserDependencies = {
-  userRepository: typeof User;
+  userRepository?: typeof User;
 };
 
 export type FetchUsersService = (req: Request, res: Response) => Promise<void>;

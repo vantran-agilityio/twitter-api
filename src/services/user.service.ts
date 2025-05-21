@@ -9,7 +9,7 @@ import {
 } from '@types';
 
 const fetchUsers =
-  ({ userRepository }: UserDependencies): FetchUsersService =>
+  ({ userRepository = User }: UserDependencies): FetchUsersService =>
   async (_req: Request, res: Response): Promise<void> => {
     try {
       const users = await userRepository.findAll();
@@ -25,7 +25,7 @@ const fetchUsers =
   };
 
 const createUser =
-  ({ userRepository }: UserDependencies): CreateUserService =>
+  ({ userRepository = User }: UserDependencies): CreateUserService =>
   async (req: Request, res: Response): Promise<void> => {
     try {
       const { name, email, password } = req.body;
@@ -44,8 +44,8 @@ const createUser =
   };
 
 const service: UserService = {
-  fetchUsers: fetchUsers({ userRepository: User }),
-  createUser: createUser({ userRepository: User }),
+  fetchUsers: fetchUsers({}),
+  createUser: createUser({}),
 };
 
 export default service;
