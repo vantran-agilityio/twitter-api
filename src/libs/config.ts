@@ -9,6 +9,6 @@ export const appConfig = {
       underscored: true,
     },
   },
-  jwtSecret: 'Twitter-AP1', // secret key
+  jwtSecret: process.env.DATABASE_SECRET || 'Twitter-AP1', // secret key
   jwtSession: { session: false },
 };

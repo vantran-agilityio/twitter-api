@@ -1,5 +1,6 @@
-import { appConfig } from '@libs';
 import { Options, Sequelize } from 'sequelize';
+
+import { appConfig } from '@libs';
 
 export const sequelize = new Sequelize(
   appConfig.database,
