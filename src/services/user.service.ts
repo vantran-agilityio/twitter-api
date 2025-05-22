@@ -104,8 +104,6 @@ const putMultipleUsers =
         }),
       );
 
-      console.log(updatedUsers);
-
       res.status(200).json(updatedUsers.filter(Boolean));
     } catch {
       res.status(500).json({ message: 'Internal server error' });

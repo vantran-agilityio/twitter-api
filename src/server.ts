@@ -1,9 +1,15 @@
 import express from 'express';
 
 import { config, sequelize } from './configs';
-import { userService, authService, postService } from '@services';
+import {
+  userService,
+  authService,
+  postService,
+  commentService,
+} from '@services';
 import { authRouter, postRouter, userRouter } from '@routes';
 import { initialize } from 'auth';
+import { commentRouter } from 'routes/comment.route';
 
 const app = express();
 app.use(express.json());
@@ -20,19 +26,20 @@ app.use(initialize());
 authRouter({ app, authService });
 userRouter({ app, userService });
 postRouter({ app, postService });
+commentRouter({ app, commentService });
 
-async function startServer() {
+async function syncDatabase() {
   try {
-    await sequelize.authenticate();
-    await sequelize.sync();
-
-    app.listen(config.port, () => {
-      console.log(`⚡️ Server is running on port ${config.port}`);
-    });
+    await sequelize.sync({ force: true });
+    console.info('Database synchronized successfully');
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
+    console.error('Error synchronizing database:', error);
   }
 }
 
-startServer();
+// Call this before starting your server
+syncDatabase().then(() => {
+  app.listen(config.port, () => {
+    console.warn(`Server running on port ${config.port}`);
+  });
+});
