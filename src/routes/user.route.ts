@@ -16,7 +16,7 @@ export const userRouter = ({
     .get(userService.fetchUsers)
     .post(userService.createUser)
     .put(userService.updateMultipleUsers)
-    .delete(userService.deleteMultipleUsers);
+    .delete(userService.deleteAllUsers);
 
   app
     .route('/users/:id')

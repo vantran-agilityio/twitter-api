@@ -41,10 +41,7 @@ const signIn =
 
 const signUp =
   ({ userRepository = User }: UserDependencies): SignUpService =>
-  async (
-    req: Request<object, object, SignUpBody>,
-    res: Response,
-  ): Promise<void> => {
+  async (req: Request<object, object, SignUpBody>, res: Response) => {
     try {
       const { name, email, password } = req.body;
 

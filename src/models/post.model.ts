@@ -1,4 +1,5 @@
 import {
+  CreationOptional,
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
@@ -12,12 +13,13 @@ export interface PostModel
     InferAttributes<PostModel>,
     InferCreationAttributes<PostModel>
   > {
-  id: string;
+  id: CreationOptional<string>;
   title: string;
+  description: string;
   userId: string;
 }
 
-export const Post = sequelize.define<PostModel>('Post', {
+export const Post = sequelize.define<PostModel>('post', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -31,8 +33,19 @@ export const Post = sequelize.define<PostModel>('Post', {
       notEmpty: true,
     },
   },
-  userId: {
+  description: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
+  },
+  userId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    references: {
+      model: 'user',
+      key: 'id',
+    },
   },
 });

@@ -1,8 +1,8 @@
 import express from 'express';
 
 import { config, sequelize } from './configs';
-import { userService, authService } from '@services';
-import { authRouter, userRouter } from '@routes';
+import { userService, authService, postService } from '@services';
+import { authRouter, postRouter, userRouter } from '@routes';
 import { initialize } from 'auth';
 
 const app = express();
@@ -17,8 +17,9 @@ app.use((req, _res, next) => {
 
 app.use(initialize());
 
-userRouter({ app, userService });
 authRouter({ app, authService });
+userRouter({ app, userService });
+postRouter({ app, postService });
 
 async function startServer() {
   try {

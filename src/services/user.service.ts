@@ -1,7 +1,7 @@
 import { User } from '@models';
 import {
   CreateUserService,
-  DeleteMultipleUsersService,
+  DeleteAllUsersService,
   FetchUsersService,
   UpdateMultipleUsersService,
   UpdateUserByIdService,
@@ -41,7 +41,11 @@ const createUser =
         return;
       }
 
-      const newUser = await userRepository.create({ name, email, password });
+      const newUser = await userRepository.create({
+        name,
+        email,
+        password,
+      });
 
       res.status(201).json(newUser);
     } catch {
@@ -137,19 +141,13 @@ const putUserById =
     }
   };
 
-const deleteMultipleUsers =
-  ({ userRepository = User }: UserDependencies): DeleteMultipleUsersService =>
-  async (req, res) => {
+const deleteAllUsers =
+  ({ userRepository = User }: UserDependencies): DeleteAllUsersService =>
+  async (_req, res) => {
     try {
-      const { ids } = req.body;
-      if (!Array.isArray(ids) || ids.length === 0) {
-        res.status(400).json({ message: 'IDs are required' });
-        return;
-      }
-
-      await Promise.all(
-        ids.map(async (id) => await userRepository.destroy({ where: { id } })),
-      );
+      userRepository.destroy({
+        where: {},
+      });
 
       res.status(200).json({
         message: 'Users deleted successfully',
@@ -182,7 +180,7 @@ const service: UserService = {
   updateUserById: putUserById({}),
 
   deleteUserById: deleteUserById({}),
-  deleteMultipleUsers: deleteMultipleUsers({}),
+  deleteAllUsers: deleteAllUsers({}),
 };
 
 export default service;

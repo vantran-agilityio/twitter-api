@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { User } from '@models';
+import type { User } from '@models';
 import { GeneralParamsType } from './param';
 
 export type UserDependencies = {
@@ -18,10 +18,6 @@ type CreateUserBody = UserBaseBody & {
 
 type UpdateUserByIdBody = UserBaseBody;
 type UpdateMultipleUsersBody = { users: (UserBaseBody & { id: string })[] };
-
-type DeleteMultipleUsersBody = {
-  ids: string[];
-};
 
 // Fetch Users
 export type FetchUsersService = (req: Request, res: Response) => Promise<void>;
@@ -47,8 +43,8 @@ export type UpdateUserByIdService = (
 ) => Promise<void>;
 
 // Delete User
-export type DeleteMultipleUsersService = (
-  req: Request<object, object, DeleteMultipleUsersBody>,
+export type DeleteAllUsersService = (
+  req: Request,
   res: Response,
 ) => Promise<void>;
 export type DeleteUserByIdService = (
@@ -66,5 +62,5 @@ export type UserService = {
   updateMultipleUsers: UpdateMultipleUsersService;
 
   deleteUserById: DeleteUserByIdService;
-  deleteMultipleUsers: DeleteMultipleUsersService;
+  deleteAllUsers: DeleteAllUsersService;
 };
