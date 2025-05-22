@@ -9,9 +9,18 @@ export const userRouter = ({
 }: {
   app: express.Application;
   userService: UserService;
-}) =>
+}) => {
   app
-    .route('/user')
+    .route('/users')
     .all(authenticate())
     .get(userService.fetchUsers)
-    .post(userService.createUser);
+    .post(userService.createUser)
+    .put(userService.updateMultipleUsers);
+
+  app
+    .route('/users/:id')
+    .all(authenticate())
+    .get(userService.fetchUserById)
+    .put(userService.updateUserById)
+    .delete(userService.deleteUserById);
+};

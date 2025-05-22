@@ -36,7 +36,6 @@ const auth = (): AuthModule => {
           if (user) {
             return done(null, {
               id: user.id,
-              email: user.email,
             });
           }
           return done(null, false);

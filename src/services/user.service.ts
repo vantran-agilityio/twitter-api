@@ -1,16 +1,17 @@
-import { Request, Response } from 'express';
-
 import { User } from '@models';
 import {
   CreateUserService,
   FetchUsersService,
+  UpdateMultipleUsersService,
+  UpdateUserByIdService,
   UserDependencies,
   UserService,
 } from '@types';
+import { isEmailValid } from '@utils';
 
 const fetchUsers =
   ({ userRepository = User }: UserDependencies): FetchUsersService =>
-  async (_req: Request, res: Response): Promise<void> => {
+  async (_req, res): Promise<void> => {
     try {
       const users = await userRepository.findAll();
 
@@ -26,12 +27,16 @@ const fetchUsers =
 
 const createUser =
   ({ userRepository = User }: UserDependencies): CreateUserService =>
-  async (req: Request, res: Response): Promise<void> => {
+  async (req, res): Promise<void> => {
     try {
       const { name, email, password } = req.body;
 
       if (!name || !email) {
         res.status(400).json({ message: 'Name and email are required' });
+        return;
+      }
+      if (!isEmailValid(email)) {
+        res.status(400).json({ message: 'Invalid email format' });
         return;
       }
 
@@ -43,9 +48,114 @@ const createUser =
     }
   };
 
+const fetchUserById =
+  ({ userRepository = User }: UserDependencies): FetchUsersService =>
+  async (req, res): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const user = await userRepository.findByPk(id);
+      if (!user) {
+        res.status(404).json({ message: 'User not found' });
+        return;
+      }
+
+      res.status(200).json(user);
+    } catch {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
+const putMultipleUsers =
+  ({ userRepository = User }: UserDependencies): UpdateMultipleUsersService =>
+  async (req, res): Promise<void> => {
+    try {
+      const { users } = req.body;
+      if (!Array.isArray(users) || users.length === 0) {
+        res.status(400).json({ message: 'Users data is required' });
+        return;
+      }
+
+      const updatedUsers = await Promise.all(
+        users.map(async (user) => {
+          const { id, name, email } = user;
+
+          if (!name || !email) {
+            res.status(400).json({ message: 'Name and email are required' });
+            return null;
+          }
+
+          if (!isEmailValid(email)) {
+            res.status(400).json({ message: 'Invalid email format' });
+            return null;
+          }
+
+          const existingUser = await userRepository.findByPk(id);
+          if (!existingUser) {
+            res.status(404).json({ message: `${name} not found` });
+            return null;
+          }
+          await existingUser.update({ name, email }, { where: { id } });
+          return existingUser;
+        }),
+      );
+
+      console.log(updatedUsers);
+
+      res.status(200).json(updatedUsers.filter(Boolean));
+    } catch {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
+const putUserById =
+  ({ userRepository = User }: UserDependencies): UpdateUserByIdService =>
+  async (req, res): Promise<void> => {
+    try {
+      const { id } = req.params;
+
+      const { name, email } = req.body;
+      if (!name || !email) {
+        res.status(400).json({ message: 'Name and email are required' });
+        return;
+      }
+      if (!isEmailValid(email)) {
+        res.status(400).json({ message: 'Invalid email format' });
+        return;
+      }
+
+      const user = await userRepository.findByPk(id);
+      if (!user) {
+        res.status(404).json({ message: 'User not found' });
+        return;
+      }
+
+      await user.update(req.body, { where: { id } });
+      res.status(200).json(user);
+    } catch {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
+const deleteUserById =
+  ({ userRepository = User }: UserDependencies): UpdateUserByIdService =>
+  async (req, res): Promise<void> => {
+    try {
+      const { id } = req.params;
+      await userRepository.destroy({ where: { id } });
+
+      res.status(200).json({ message: 'User deleted successfully' });
+    } catch {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
 const service: UserService = {
-  fetchUsers: fetchUsers({}),
   createUser: createUser({}),
+  fetchUsers: fetchUsers({}),
+  fetchUserById: fetchUserById({}),
+  updateUserById: putUserById({}),
+  deleteUserById: deleteUserById({}),
+  updateMultipleUsers: putMultipleUsers({}),
 };
 
 export default service;

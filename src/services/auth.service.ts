@@ -1,19 +1,22 @@
+import { Request, Response } from 'express';
 import jwt from 'jwt-simple';
 
 import { appConfig } from '@libs';
 import {
   AuthService,
+  SignInBody,
   SignInService,
+  SignUpBody,
   SignUpService,
   UserDependencies,
 } from '@types';
 import { isPasswordValid } from '@utils';
-import { Request, Response } from 'express';
+
 import { User } from '@models';
 
 const signIn =
   ({ userRepository = User }: UserDependencies): SignInService =>
-  async (req, res) => {
+  async (req: Request<object, object, SignInBody>, res) => {
     if (req.body.email && req.body.password) {
       const email = req.body.email;
       const password = req.body.password;
@@ -38,7 +41,10 @@ const signIn =
 
 const signUp =
   ({ userRepository = User }: UserDependencies): SignUpService =>
-  async (req: Request, res: Response): Promise<void> => {
+  async (
+    req: Request<object, object, SignUpBody>,
+    res: Response,
+  ): Promise<void> => {
     try {
       const { name, email, password } = req.body;
 
