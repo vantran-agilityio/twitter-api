@@ -12,11 +12,15 @@ type UserBaseBody = {
   email: string;
 };
 
+type CreateUserBody = UserBaseBody & {
+  password: string;
+};
+
 type UpdateUserByIdBody = UserBaseBody;
 type UpdateMultipleUsersBody = { users: (UserBaseBody & { id: string })[] };
 
-type CreateUserBody = UserBaseBody & {
-  password: string;
+type DeleteMultipleUsersBody = {
+  ids: string[];
 };
 
 // Fetch Users
@@ -43,6 +47,10 @@ export type UpdateUserByIdService = (
 ) => Promise<void>;
 
 // Delete User
+export type DeleteMultipleUsersService = (
+  req: Request<object, object, DeleteMultipleUsersBody>,
+  res: Response,
+) => Promise<void>;
 export type DeleteUserByIdService = (
   req: Request<GeneralParamsType>,
   res: Response,
@@ -51,8 +59,12 @@ export type DeleteUserByIdService = (
 export type UserService = {
   fetchUsers: FetchUsersService;
   fetchUserById: FetchUserByIdService;
+
   createUser: CreateUserService;
+
   updateUserById: UpdateUserByIdService;
   updateMultipleUsers: UpdateMultipleUsersService;
+
   deleteUserById: DeleteUserByIdService;
+  deleteMultipleUsers: DeleteMultipleUsersService;
 };

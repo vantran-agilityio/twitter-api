@@ -1,6 +1,7 @@
 import { User } from '@models';
 import {
   CreateUserService,
+  DeleteMultipleUsersService,
   FetchUsersService,
   UpdateMultipleUsersService,
   UpdateUserByIdService,
@@ -11,7 +12,7 @@ import { isEmailValid } from '@utils';
 
 const fetchUsers =
   ({ userRepository = User }: UserDependencies): FetchUsersService =>
-  async (_req, res): Promise<void> => {
+  async (_req, res) => {
     try {
       const users = await userRepository.findAll();
 
@@ -27,7 +28,7 @@ const fetchUsers =
 
 const createUser =
   ({ userRepository = User }: UserDependencies): CreateUserService =>
-  async (req, res): Promise<void> => {
+  async (req, res) => {
     try {
       const { name, email, password } = req.body;
 
@@ -50,7 +51,7 @@ const createUser =
 
 const fetchUserById =
   ({ userRepository = User }: UserDependencies): FetchUsersService =>
-  async (req, res): Promise<void> => {
+  async (req, res) => {
     try {
       const { id } = req.params;
       const user = await userRepository.findByPk(id);
@@ -67,7 +68,7 @@ const fetchUserById =
 
 const putMultipleUsers =
   ({ userRepository = User }: UserDependencies): UpdateMultipleUsersService =>
-  async (req, res): Promise<void> => {
+  async (req, res) => {
     try {
       const { users } = req.body;
       if (!Array.isArray(users) || users.length === 0) {
@@ -109,7 +110,7 @@ const putMultipleUsers =
 
 const putUserById =
   ({ userRepository = User }: UserDependencies): UpdateUserByIdService =>
-  async (req, res): Promise<void> => {
+  async (req, res) => {
     try {
       const { id } = req.params;
 
@@ -136,9 +137,31 @@ const putUserById =
     }
   };
 
+const deleteMultipleUsers =
+  ({ userRepository = User }: UserDependencies): DeleteMultipleUsersService =>
+  async (req, res) => {
+    try {
+      const { ids } = req.body;
+      if (!Array.isArray(ids) || ids.length === 0) {
+        res.status(400).json({ message: 'IDs are required' });
+        return;
+      }
+
+      await Promise.all(
+        ids.map(async (id) => await userRepository.destroy({ where: { id } })),
+      );
+
+      res.status(200).json({
+        message: 'Users deleted successfully',
+      });
+    } catch {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
 const deleteUserById =
   ({ userRepository = User }: UserDependencies): UpdateUserByIdService =>
-  async (req, res): Promise<void> => {
+  async (req, res) => {
     try {
       const { id } = req.params;
       await userRepository.destroy({ where: { id } });
@@ -150,12 +173,16 @@ const deleteUserById =
   };
 
 const service: UserService = {
-  createUser: createUser({}),
   fetchUsers: fetchUsers({}),
   fetchUserById: fetchUserById({}),
-  updateUserById: putUserById({}),
-  deleteUserById: deleteUserById({}),
+
+  createUser: createUser({}),
+
   updateMultipleUsers: putMultipleUsers({}),
+  updateUserById: putUserById({}),
+
+  deleteUserById: deleteUserById({}),
+  deleteMultipleUsers: deleteMultipleUsers({}),
 };
 
 export default service;
