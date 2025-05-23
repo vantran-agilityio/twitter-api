@@ -30,7 +30,7 @@ commentRouter({ app, commentService });
 
 async function syncDatabase() {
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: false });
     console.info('Database synchronized successfully');
   } catch (error) {
     console.error('Error synchronizing database:', error);

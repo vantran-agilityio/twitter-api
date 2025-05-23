@@ -37,16 +37,8 @@ export const Comment = sequelize.define<CommentModel>('comment', {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: 'post',
+      model: 'posts', // Assuming the posts table is named 'posts'
       key: 'id',
     },
   },
-  //   userId: {
-  //     type: DataTypes.UUID,
-  //     allowNull: false,
-  //     references: {
-  //       model: 'user',
-  //       key: 'id',
-  //     },
-  //   },
 });

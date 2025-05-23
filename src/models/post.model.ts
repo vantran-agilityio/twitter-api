@@ -44,7 +44,7 @@ export const Post = sequelize.define<PostModel>('post', {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: 'user',
+      model: 'users', // Assuming the users table is named 'users'
       key: 'id',
     },
   },
