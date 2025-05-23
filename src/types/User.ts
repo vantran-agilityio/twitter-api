@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
-import type { User } from '@models';
 import { GeneralParamsType } from './param';
+import { User } from '@models';
 
 export type UserDependencies = {
   userRepository?: typeof User;

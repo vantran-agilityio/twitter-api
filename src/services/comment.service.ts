@@ -145,14 +145,33 @@ const deleteAllComments =
     }
   };
 
-const service: CommentService = {
-  fetchComments: fetchComments({}),
-  fetchCommentById: fetchCommentById({}),
+const createService = ({
+  commentRepository = Comment,
+  postRepository = Post,
+}: CommentDependencies): CommentService => {
+  return {
+    fetchComments: fetchComments({
+      commentRepository,
+    }),
+    fetchCommentById: fetchCommentById({
+      commentRepository,
+    }),
 
-  createComment: createComment({}),
+    createComment: createComment({
+      commentRepository,
+      postRepository,
+    }),
 
-  deleteCommentById: deleteCommentById({}),
-  deleteAllComments: deleteAllComments({}),
+    deleteCommentById: deleteCommentById({
+      commentRepository,
+    }),
+    deleteAllComments: deleteAllComments({
+      commentRepository,
+    }),
+  };
 };
 
-export default service;
+export default createService({
+  commentRepository: Comment,
+  postRepository: Post,
+});

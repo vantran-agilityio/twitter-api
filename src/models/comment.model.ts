@@ -4,6 +4,7 @@ import {
   InferAttributes,
   InferCreationAttributes,
   Model,
+  ModelStatic,
 } from 'sequelize';
 
 import { sequelize } from '@configs';
@@ -16,8 +17,9 @@ export interface CommentModel
   id: CreationOptional<string>;
   content: string;
   postId: string;
-  //   userId: string; // Optional
 }
+
+export type CommentRepository = ModelStatic<CommentModel>;
 
 export const Comment = sequelize.define<CommentModel>('comment', {
   id: {

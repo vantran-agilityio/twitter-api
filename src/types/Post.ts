@@ -1,6 +1,7 @@
-import { Post, User } from '@models';
 import { Request, Response } from 'express';
+
 import { DeletePostParamsType, GeneralParamsType } from './param';
+import { Post, User } from '@models';
 
 export type PostDependencies = {
   postRepository?: typeof Post;

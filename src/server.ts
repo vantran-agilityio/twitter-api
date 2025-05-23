@@ -23,23 +23,28 @@ app.use((req, _res, next) => {
 
 app.use(initialize());
 
-authRouter({ app, authService });
-userRouter({ app, userService });
-postRouter({ app, postService });
-commentRouter({ app, commentService });
-
-async function syncDatabase() {
+// Initialize database before setting up routes
+async function initializeApp() {
   try {
+    // Ensure database is synced first
     await sequelize.sync({ force: false });
     console.info('Database synchronized successfully');
+
+    // Register routes after database is ready
+    authRouter({ app, authService });
+    userRouter({ app, userService });
+    postRouter({ app, postService });
+    commentRouter({ app, commentService });
+
+    // Start the server
+    app.listen(config.port, () => {
+      console.warn(`Server running on port ${config.port}`);
+    });
   } catch (error) {
-    console.error('Error synchronizing database:', error);
+    console.error('Error initializing application:', error);
+    process.exit(1);
   }
 }
 
-// Call this before starting your server
-syncDatabase().then(() => {
-  app.listen(config.port, () => {
-    console.warn(`Server running on port ${config.port}`);
-  });
-});
+// Start the application
+initializeApp();

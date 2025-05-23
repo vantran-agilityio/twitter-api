@@ -1,6 +1,6 @@
-import { Comment, Post } from '@models';
 import { Request, Response } from 'express';
 import { FetchCommentParamsType, GeneralParamsType } from './param';
+import { Comment, Post } from '@models';
 
 export type CommentDependencies = {
   commentRepository?: typeof Comment;

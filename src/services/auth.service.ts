@@ -3,7 +3,6 @@ import jwt from 'jwt-simple';
 
 import { appConfig } from '@libs';
 import {
-  AuthService,
   SignInBody,
   SignInService,
   SignUpBody,
@@ -64,9 +63,13 @@ const signUp =
     }
   };
 
-const service: AuthService = {
-  signIn: signIn({}),
-  signUp: signUp({}),
+const createService = ({ userRepository }: UserDependencies) => {
+  return {
+    signIn: signIn({ userRepository }),
+    signUp: signUp({ userRepository }),
+  };
 };
 
-export default service;
+export default createService({
+  userRepository: User,
+});

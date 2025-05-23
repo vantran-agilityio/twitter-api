@@ -152,16 +152,19 @@ const deleteMultiplePosts =
     }
   };
 
-const service: PostService = {
-  fetchPosts: fetchPosts({}),
-  fetchPostById: fetchPostById({}),
+const createService = ({
+  postRepository = Post,
+  userRepository = User,
+}: PostDependencies): PostService => ({
+  fetchPosts: fetchPosts({ postRepository }),
+  fetchPostById: fetchPostById({ postRepository }),
+  createPost: createPost({ postRepository, userRepository }),
+  updatePostById: updatePostById({ postRepository }),
+  deletePostById: deletePostById({ postRepository, userRepository }),
+  deleteAllPosts: deleteMultiplePosts({ postRepository }),
+});
 
-  createPost: createPost({}),
-
-  updatePostById: updatePostById({}),
-
-  deletePostById: deletePostById({}),
-  deleteAllPosts: deleteMultiplePosts({}),
-};
-
-export default service;
+export default createService({
+  postRepository: Post,
+  userRepository: User,
+});

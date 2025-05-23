@@ -168,17 +168,27 @@ const deleteUserById =
     }
   };
 
-const service: UserService = {
-  fetchUsers: fetchUsers({}),
-  fetchUserById: fetchUserById({}),
+const createService = ({
+  userRepository = User,
+}: UserDependencies): UserService => {
+  return {
+    fetchUsers: fetchUsers({ userRepository }),
+    fetchUserById: fetchUserById({ userRepository }),
 
-  createUser: createUser({}),
+    createUser: createUser({ userRepository }),
 
-  updateMultipleUsers: putMultipleUsers({}),
-  updateUserById: putUserById({}),
+    updateMultipleUsers: putMultipleUsers({
+      userRepository,
+    }),
+    updateUserById: putUserById({ userRepository }),
 
-  deleteUserById: deleteUserById({}),
-  deleteAllUsers: deleteAllUsers({}),
+    deleteUserById: deleteUserById({
+      userRepository,
+    }),
+    deleteAllUsers: deleteAllUsers({
+      userRepository,
+    }),
+  };
 };
 
-export default service;
+export default createService({ userRepository: User });
