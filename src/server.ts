@@ -1,15 +1,16 @@
 import express from 'express';
 
-import { config, sequelize } from './configs';
 import {
   userService,
   authService,
   postService,
   commentService,
 } from '@services';
-import { authRouter, postRouter, userRouter } from '@routes';
-import { initialize } from 'auth';
-import { commentRouter } from 'routes/comment.route';
+import { commentRouter, authRouter, postRouter, userRouter } from '@routes';
+
+import { initialize } from './auth';
+import { config, sequelize } from './configs';
+import swaggerDocs from './swagger';
 
 const app = express();
 app.use(express.json());
@@ -23,28 +24,26 @@ app.use((req, _res, next) => {
 
 app.use(initialize());
 
-// Initialize database before setting up routes
 async function initializeApp() {
   try {
-    // Ensure database is synced first
     await sequelize.sync({ force: false });
     console.info('Database synchronized successfully');
 
-    // Register routes after database is ready
     authRouter({ app, authService });
     userRouter({ app, userService });
     postRouter({ app, postService });
+
     commentRouter({ app, commentService });
 
-    // Start the server
     app.listen(config.port, () => {
       console.warn(`Server running on port ${config.port}`);
     });
+
+    swaggerDocs(app);
   } catch (error) {
     console.error('Error initializing application:', error);
     process.exit(1);
   }
 }
 
-// Start the application
 initializeApp();
