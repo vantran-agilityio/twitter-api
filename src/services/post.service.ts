@@ -19,8 +19,6 @@ export class PostService {
   }
 
   async createPost(userId: string, postData: CreatePostBody) {
-    console.log('Creating post with data:', userId);
-
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new Error('User not found');

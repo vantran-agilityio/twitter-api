@@ -1,6 +1,5 @@
 import express from 'express';
 
-import { commentService } from '@services';
 import { commentRouter, authRouter, postRouter, userRouter } from '@routes';
 
 import { initialize } from './auth';
@@ -25,13 +24,17 @@ async function initializeApp() {
     await sequelize.sync({ force: false });
     console.info('Database synchronized successfully');
 
-    const { userController, authController, postController } =
-      initializeDependencies();
+    const {
+      userController,
+      authController,
+      postController,
+      commentController,
+    } = initializeDependencies();
 
     authRouter({ app, authController });
     userRouter({ app, userController });
     postRouter({ app, postController });
-    commentRouter({ app, commentService });
+    commentRouter({ app, commentController });
 
     app.listen(config.port, () => {
       console.warn(`Server running on port ${config.port}`);

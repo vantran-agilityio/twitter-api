@@ -1,14 +1,14 @@
 import express from 'express';
 
-import { CommentService } from '@types';
 import { authenticate } from 'auth';
+import { CommentController } from '@controllers';
 
 export const commentRouter = ({
   app,
-  commentService,
+  commentController,
 }: {
   app: express.Application;
-  commentService: CommentService;
+  commentController: CommentController;
 }) => {
   app
     .route('/posts/:id/comments')
@@ -134,9 +134,9 @@ export const commentRouter = ({
      *         description: Server Error
      */
     .all(authenticate())
-    .get(commentService.fetchComments)
-    .post(commentService.createComment)
-    .delete(commentService.deleteAllComments);
+    .get(commentController.fetchComments)
+    .post(commentController.createComment)
+    .delete(commentController.deleteAllComments);
 
   app
     .route('/posts/:postId/comment/:commentId')
@@ -221,6 +221,6 @@ export const commentRouter = ({
      *         description: Server Error
      */
     .all(authenticate())
-    .get(commentService.fetchCommentById)
-    .delete(commentService.deleteCommentById);
+    .get(commentController.fetchCommentById)
+    .delete(commentController.deleteCommentById);
 };
