@@ -1,75 +1,35 @@
-import { Request, Response } from 'express';
 import jwt from 'jwt-simple';
 
-import { appConfig } from '@libs';
-import {
-  SignInBody,
-  SignInService,
-  SignUpBody,
-  SignUpService,
-  UserDependencies,
-} from '@types';
+import { UserRepository } from '@repositories';
 import { isPasswordValid } from '@utils';
+import { appConfig } from '@libs';
 
-import { User } from '@models';
+export class AuthService {
+  private userRepository: UserRepository;
 
-const signIn =
-  ({ userRepository = User }: UserDependencies): SignInService =>
-  async (req: Request<object, object, SignInBody>, res) => {
-    if (req.body.email && req.body.password) {
-      const email = req.body.email;
-      const password = req.body.password;
+  constructor(userRepository: UserRepository) {
+    this.userRepository = userRepository;
+  }
 
-      userRepository
-        .findOne({ where: { email } })
-        .then((user) => {
-          if (user && isPasswordValid(user.password, password)) {
-            const payload = { id: user.id };
-            res.json({
-              token: jwt.encode(payload, appConfig.jwtSecret),
-            });
-          } else {
-            res.status(401).json({ message: 'Invalid credentials' });
-          }
-        })
-        .catch(() => res.sendStatus(401));
-    } else {
-      res.sendStatus(401);
-    }
-  };
+  async signIn(email: string, password: string) {
+    return this.userRepository.findByEmail(email).then((user) => {
+      if (user && isPasswordValid(user.password, password)) {
+        const payload = { id: user.id };
 
-const signUp =
-  ({ userRepository = User }: UserDependencies): SignUpService =>
-  async (req: Request<object, object, SignUpBody>, res: Response) => {
-    try {
-      const { name, email, password } = req.body;
-
-      if (!name || !email) {
-        res.status(400).json({ message: 'Name and email are required' });
-        return;
+        return { token: jwt.encode(payload, appConfig.jwtSecret) };
+      } else {
+        throw new Error('Invalid credentials');
       }
+    });
+  }
 
-      const existingUser = await userRepository.findOne({ where: { email } });
-      if (existingUser) {
-        res.status(400).json({ message: 'Email already exists' });
-        return;
-      }
-
-      const newUser = await userRepository.create({ name, email, password });
-
-      res.status(201).json({ newUser, password });
-    } catch {
-      res.status(500).json({ message: 'Internal server error' });
+  async signUp(name: string, email: string, password: string) {
+    const existingUser = await this.userRepository.findByEmail(email);
+    if (existingUser) {
+      throw new Error('Email already exists');
     }
-  };
 
-const createService = ({ userRepository }: UserDependencies) => {
-  return {
-    signIn: signIn({ userRepository }),
-    signUp: signUp({ userRepository }),
-  };
-};
-
-export default createService({
-  userRepository: User,
-});
+    const newUser = await this.userRepository.create({ name, email, password });
+    return newUser;
+  }
+}

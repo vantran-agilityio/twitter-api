@@ -1,9 +1,3 @@
-import { User } from '@models';
-
-export type UserDependencies = {
-  userRepository?: typeof User;
-};
-
 type UserBaseBody = {
   name: string;
   email: string;

@@ -8,7 +8,7 @@ import {
 } from '@types';
 
 export class UserController {
-  userService: UserService;
+  private userService: UserService;
 
   constructor(userService: UserService) {
     this.userService = userService;

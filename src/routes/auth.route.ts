@@ -1,14 +1,18 @@
 import express from 'express';
 
-import { AuthService } from '@types';
+import { AuthController } from '@controllers';
 
-const route = express.Router();
-
-const auth = (authService: AuthService) =>
-  route
+export const authRouter = ({
+  app,
+  authController,
+}: {
+  app: express.Application;
+  authController: AuthController;
+}) =>
+  app
     /**
      * @openapi
-     * /auth/signup:
+     * /signup:
      *   post:
      *     tags:
      *       - Authentication
@@ -56,10 +60,10 @@ const auth = (authService: AuthService) =>
      *       500:
      *         description: Server Error
      */
-    .post('/signup', authService.signUp)
+    .post('/signup', authController.signUp)
     /**
      * @openapi
-     * /auth/signin:
+     * /signin:
      *   post:
      *     tags:
      *       - Authentication
@@ -104,12 +108,4 @@ const auth = (authService: AuthService) =>
      *       500:
      *         description: Server Error
      */
-    .post('/signin', authService.signIn);
-
-export const authRouter = ({
-  app,
-  authService,
-}: {
-  app: express.Application;
-  authService: AuthService;
-}) => app.use('/auth', auth(authService));
+    .post('/signin', authController.signIn);

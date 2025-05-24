@@ -1,11 +1,6 @@
 import express from 'express';
 
-import {
-  // userService,
-  authService,
-  postService,
-  commentService,
-} from '@services';
+import { postService, commentService } from '@services';
 import { commentRouter, authRouter, postRouter, userRouter } from '@routes';
 
 import { initialize } from './auth';
@@ -30,12 +25,11 @@ async function initializeApp() {
     await sequelize.sync({ force: false });
     console.info('Database synchronized successfully');
 
-    const { userController } = initializeDependencies();
+    const { userController, authController } = initializeDependencies();
 
-    authRouter({ app, authService });
+    authRouter({ app, authController });
     userRouter({ app, userController });
     postRouter({ app, postService });
-
     commentRouter({ app, commentService });
 
     app.listen(config.port, () => {

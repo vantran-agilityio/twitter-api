@@ -14,6 +14,12 @@ export class UserRepository {
     });
   }
 
+  async findByEmail(email: string) {
+    return this.user.findOne({
+      where: { email },
+    });
+  }
+
   async findAll() {
     return this.user.findAll();
   }
