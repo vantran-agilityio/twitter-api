@@ -1,14 +1,14 @@
 import express from 'express';
 
-import { PostService } from '@types';
 import { authenticate } from 'auth';
+import { PostController } from '@controllers';
 
 export const postRouter = ({
   app,
-  postService,
+  postController,
 }: {
   app: express.Application;
-  postService: PostService;
+  postController: PostController;
 }) => {
   app
     .route('/posts')
@@ -68,8 +68,8 @@ export const postRouter = ({
      *         description: Server Error
      */
     .all(authenticate())
-    .get(postService.fetchPosts)
-    .delete(postService.deleteAllPosts);
+    .get(postController.getPosts)
+    .delete(postController.deleteAllPosts);
 
   app
     .route('/posts/:id')
@@ -161,8 +161,8 @@ export const postRouter = ({
      *         description: Server Error
      */
     .all(authenticate())
-    .get(postService.fetchPostById)
-    .put(postService.updatePostById);
+    .get(postController.getPostById)
+    .put(postController.updatePostById);
 
   app
     .route('/users/:id/post')
@@ -236,7 +236,7 @@ export const postRouter = ({
      *         description: Server Error
      */
     .all(authenticate())
-    .post(postService.createPost);
+    .post(postController.createPost);
 
   app
     .route('/users/:userId/post/:postId')
@@ -274,5 +274,5 @@ export const postRouter = ({
      *         description: Server Error
      */
     .all(authenticate())
-    .delete(postService.deletePostById);
+    .delete(postController.deletePostById);
 };

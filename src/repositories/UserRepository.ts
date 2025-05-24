@@ -2,13 +2,16 @@ import { User } from '@models';
 import { CreateUserBody, UpdateUserByIdBody, UserBody } from '@types';
 
 export class UserRepository {
-  user: typeof User;
+  private user: typeof User;
 
   constructor(user: typeof User) {
     this.user = user;
   }
 
   async findById(id: string) {
+    return this.user.findByPk(id);
+    console.log('Finding user by ID:', id);
+
     return this.user.findOne({
       where: { id },
     });

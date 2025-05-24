@@ -1,20 +1,19 @@
-import { User } from '@models';
-import { UserRepository } from '@repositories';
-import { AuthService, UserService } from '@services';
-import { AuthController, UserController } from '@controllers';
+import { Post, User } from '@models';
+import { PostRepository, UserRepository } from '@repositories';
+import { AuthService, PostService, UserService } from '@services';
+import { AuthController, PostController, UserController } from '@controllers';
 
 export function initializeDependencies() {
   const userRepository = new UserRepository(User);
-  // const postRepository = new PostRepository();
+  const postRepository = new PostRepository(Post);
 
-  // Khởi tạo các service và truyền repository tương ứng
   const userService = new UserService(userRepository);
   const authService = new AuthService(userRepository);
+  const postService = new PostService(postRepository, userRepository);
 
-  // Khởi tạo controller và truyền các service
   const userController = new UserController(userService);
   const authController = new AuthController(authService);
-  // const postController = new PostController(userService, postService);
+  const postController = new PostController(postService);
 
-  return { userController, authController };
+  return { userController, authController, postController };
 }
