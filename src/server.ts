@@ -1,7 +1,7 @@
 import express from 'express';
 
 import {
-  userService,
+  // userService,
   authService,
   postService,
   commentService,
@@ -11,6 +11,7 @@ import { commentRouter, authRouter, postRouter, userRouter } from '@routes';
 import { initialize } from './auth';
 import { config, sequelize } from './configs';
 import swaggerDocs from './swagger';
+import { initializeDependencies } from './container';
 
 const app = express();
 app.use(express.json());
@@ -29,8 +30,10 @@ async function initializeApp() {
     await sequelize.sync({ force: false });
     console.info('Database synchronized successfully');
 
+    const { userController } = initializeDependencies();
+
     authRouter({ app, authService });
-    userRouter({ app, userService });
+    userRouter({ app, userController });
     postRouter({ app, postService });
 
     commentRouter({ app, commentService });

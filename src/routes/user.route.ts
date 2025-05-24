@@ -1,14 +1,14 @@
 import express from 'express';
 
-import { UserService } from '@types';
 import { authenticate } from 'auth';
+import { UserController } from '@controllers';
 
 export const userRouter = ({
   app,
-  userService,
+  userController,
 }: {
   app: express.Application;
-  userService: UserService;
+  userController: UserController;
 }) => {
   app
     .route('/users')
@@ -141,10 +141,10 @@ export const userRouter = ({
      *         description: Server Error
      */
     .all(authenticate())
-    .get(userService.fetchUsers)
-    .post(userService.createUser)
-    .put(userService.updateMultipleUsers)
-    .delete(userService.deleteAllUsers);
+    .get(userController.fetchUsers)
+    .post(userController.createUser)
+    .put(userController.updateMultipleUsers)
+    .delete(userController.deleteAllUsers);
 
   app
     .route('/users/:id')
@@ -250,7 +250,7 @@ export const userRouter = ({
      *         description: Server Error
      */
     .all(authenticate())
-    .get(userService.fetchUserById)
-    .put(userService.updateUserById)
-    .delete(userService.deleteUserById);
+    .get(userController.fetchUserById)
+    .put(userController.updateUserById)
+    .delete(userController.deleteUserById);
 };

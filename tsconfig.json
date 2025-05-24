@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "CommonJS",                               
-    "rootDir": "./src",                                  
-    "outDir": "./dist", 
-    "esModuleInterop": true,                            
+    "module": "CommonJS",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "strict": true,                                      
+    "strict": true,
     "baseUrl": "./src",
     "paths": {
       "@configs": ["./configs/index.ts"],
@@ -19,15 +19,13 @@
       "@tests": ["./tests/index.ts"],
       "@types": ["./types/index.ts"],
       "@utils": ["./utils/index.ts"],
+      "@repositories": ["./repositories/index.ts"],
+      "@controllers": ["./controllers/index.ts"]
     },
 
     "removeComments": true,
     "sourceMap": true
   },
-  "include": [
-    "./src/**/*",
-  ],
-  "exclude": [
-    "node_modules",
-  ],
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"]
 }
