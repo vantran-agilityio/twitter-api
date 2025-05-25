@@ -24,8 +24,9 @@
     },
 
     "removeComments": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["jest"]
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "src/tests/**/*.test.ts"],
   "exclude": ["node_modules"]
 }

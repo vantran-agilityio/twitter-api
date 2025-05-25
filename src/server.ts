@@ -8,7 +8,7 @@ import swaggerDocs from './swagger';
 import { initializeDependencies } from './container';
 import { configureMiddlewares } from './middlewares';
 
-const app = express();
+export const app = express();
 
 configureMiddlewares(app);
 

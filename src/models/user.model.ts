@@ -14,7 +14,7 @@ export interface UserModel
     InferAttributes<UserModel>,
     InferCreationAttributes<UserModel>
   > {
-  id: CreationOptional<number>;
+  id: CreationOptional<string>;
   name: string;
   email: string;
   password: string;

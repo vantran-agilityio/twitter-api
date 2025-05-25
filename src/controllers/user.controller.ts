@@ -61,6 +61,12 @@ export class UserController {
       const { id } = req.params;
       const { name, email } = req.body;
 
+      const user = await this.userService.getUserById(id);
+      if (!user) {
+        res.status(404).json({ error: 'User not found' });
+        return;
+      }
+
       if (!name && !email) {
         res.status(400).json({ error: 'Name or email is required' });
         return;
