@@ -6,23 +6,18 @@ import { initialize } from './auth';
 import { config, sequelize } from './configs';
 import swaggerDocs from './swagger';
 import { initializeDependencies } from './container';
+import { configureMiddlewares } from './middlewares';
 
 const app = express();
-app.use(express.json());
 
-app.use((req, _res, next) => {
-  if (req.body) {
-    delete req.body.id;
-  }
-  next();
-});
+configureMiddlewares(app);
 
 app.use(initialize());
 
 async function initializeApp() {
   try {
     await sequelize.sync({ force: false });
-    console.info('Database synchronized successfully');
+    console.info('✅ Database synchronized successfully');
 
     const {
       userController,
@@ -37,12 +32,12 @@ async function initializeApp() {
     commentRouter({ app, commentController });
 
     app.listen(config.port, () => {
-      console.warn(`Server running on port ${config.port}`);
+      console.warn(`⚡️ Server running on port ${config.port}`);
     });
 
     swaggerDocs(app);
   } catch (error) {
-    console.error('Error initializing application:', error);
+    console.error('❌ Error initializing application:', error);
     process.exit(1);
   }
 }
