@@ -1,5 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
+import morgan from 'morgan';
+
+import logger from './logger';
 
 export const removeBodyId = (req: Request, _: Response, next: NextFunction) => {
   if (req.body) {
@@ -8,8 +11,18 @@ export const removeBodyId = (req: Request, _: Response, next: NextFunction) => {
   next();
 };
 
+const morganMiddleware = morgan('common', {
+  stream: {
+    write: (message) => {
+      logger.info(message.trim());
+    },
+  },
+});
+
 export const configureMiddlewares = (app: express.Application): void => {
   app.use(express.json());
+
+  app.use(morganMiddleware);
 
   app.use(express.urlencoded({ extended: true }));
 
