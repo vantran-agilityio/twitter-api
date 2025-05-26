@@ -22,6 +22,14 @@ This template provides a solid foundation for building scalable and maintainable
   - Register
   - Login
 
+- User:
+
+  - Get all users
+  - Get user by id
+  - Update a user
+  - Delete user by id
+  - Delete all user
+
 - Post:
 
   - Get all posts
@@ -54,12 +62,14 @@ This template provides a solid foundation for building scalable and maintainable
 └── src/
     ├── configs/
     ├── constants/
+    ├── controllers/
     ├── libs/
     ├── models/
+    ├── repositories/
     ├── routes/
-    ├── middlewares/
     ├── services/
     ├── tests/
+    ├── types/
     └── utils/
 ```
 
@@ -68,7 +78,7 @@ This template provides a solid foundation for building scalable and maintainable
 ### Prerequisites
 
 - Node.js (v14 or higher)
-- npm or yarn
+- npm
 - Database (SQLite)
 
 ### Installation
@@ -94,26 +104,20 @@ cp .env.example .env
 # Edit .env file with your settings
 ```
 
-4. Run database migrations (if applicable):
+4. Start the server:
 
 ```bash
-npm run db:migrate
-```
-
-5. Start the server:
-
-```bash
-npm start
+npm run dev
 ```
 
 ## Available Scripts
 
-- `npm start` - Generates API documentation and starts the server
+- `npm run dev` - Runs app with dev mode
+- `npm run build` - Build server
+- `npm start` - Starts the server
 - `npm test` - Runs the test suite
 
 ## Testing
-
-The project uses Mocha as the test runner, Chai for assertions, and Supertest for HTTP testing:
 
 ```bash
 npm test
@@ -125,13 +129,21 @@ Tests are organized by modules and run in a dedicated test environment to ensure
 
 API documentation is automatically generated from inline comments using Swagger. After starting the server, access the documentation at:
 
+- Documentation
+
 ```
-http://localhost:3000/swagger/
+http://localhost:3000/docs
+```
+
+- Documentation in JSON format
+
+```
+http://localhost:3000/docs.json
 ```
 
 ## Deployment
 
-Instructions for deploying to various environments:
+https://twitter-api-ohjg.onrender.com
 
 ## Author
 

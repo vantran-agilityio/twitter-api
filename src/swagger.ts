@@ -47,8 +47,7 @@ const swaggerSpec = swaggerJsdoc(options);
 const swaggerDocs = (app: express.Application) => {
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-  // Documentation in JSON format
-  app.get('/docs.json', (req, res) => {
+  app.get('/docs.json', (_, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
   });
