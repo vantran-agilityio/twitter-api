@@ -12,5 +12,6 @@ module.exports = {
     '^@types(.*)$': '<rootDir>/src/types$1',
     '^@middlewares(.*)$': '<rootDir>/src/middlewares$1',
     '^@routes(.*)$': '<rootDir>/src/routes$1',
+    '^@utils(.*)$': '<rootDir>/src/utils$1',
   },
 };
