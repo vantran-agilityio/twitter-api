@@ -2,6 +2,7 @@ import { PostService } from '@services';
 import { PostRepository, UserRepository } from '@repositories';
 import { Post, User, PostModel, UserModel } from '@models';
 import { CreatePostBody, PostBaseBody } from '@types';
+import { ERROR } from '@constants';
 
 // Mock the repositories
 jest.mock('@repositories', () => {
