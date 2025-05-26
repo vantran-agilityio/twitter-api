@@ -8,7 +8,7 @@
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node -r tsconfig-paths/register' src/server.ts",
     "start": "node ./dist/server.js",
     "lint": "eslint 'src/**/*.ts'",
-    "render-build": "npm install --production=false && npm run lint && npm run build",
+    "render-build": "npm install && npm run lint && npm run build",
     "test": "NODE_ENV=test jest"
   },
   "author": "Van Tran",
