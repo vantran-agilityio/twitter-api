@@ -150,7 +150,7 @@ describe('PostService', () => {
 
       await expect(
         postService.createPost('nonexistent', postData),
-      ).rejects.toThrow('User not found');
+      ).rejects.toThrow(ERROR.USER_NOT_FOUND);
       expect(userRepository.findById).toHaveBeenCalledWith('nonexistent');
       expect(postRepository.create).not.toHaveBeenCalled();
     });
@@ -277,7 +277,7 @@ describe('PostService', () => {
 
       await expect(
         postService.deletePostById('1', 'nonexistent'),
-      ).rejects.toThrow('User not found');
+      ).rejects.toThrow(ERROR.USER_NOT_FOUND);
       expect(userRepository.findById).toHaveBeenCalledWith('nonexistent');
       expect(postRepository.findById).not.toHaveBeenCalled();
       expect(postRepository.deleteById).not.toHaveBeenCalled();

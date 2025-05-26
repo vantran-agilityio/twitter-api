@@ -8,6 +8,7 @@ import {
   GeneralParamsType,
   FetchCommentParamsType,
 } from '@types';
+import { ERROR } from '@constants';
 
 jest.mock('@services', () => {
   return {
@@ -118,7 +119,7 @@ describe('CommentController', () => {
         expect.any(Error),
       );
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.COMMON });
     });
   });
 
@@ -169,7 +170,7 @@ describe('CommentController', () => {
         expect.any(Error),
       );
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.COMMON });
     });
   });
 
@@ -192,7 +193,7 @@ describe('CommentController', () => {
         expect.any(Error),
       );
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.COMMON });
     });
   });
 
@@ -226,7 +227,7 @@ describe('CommentController', () => {
         expect.any(Error),
       );
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.COMMON });
     });
   });
 
@@ -255,7 +256,7 @@ describe('CommentController', () => {
         res as Response,
       );
 
-      expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.COMMON });
     });
 
     it('should handle errors and return 500 status', async () => {
@@ -274,7 +275,7 @@ describe('CommentController', () => {
         expect.any(Error),
       );
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.COMMON });
     });
   });
 });

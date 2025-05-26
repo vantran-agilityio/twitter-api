@@ -1,3 +1,4 @@
+import { ERROR } from '@constants';
 import { AuthService } from '@services';
 import { SignInBody, SignUpBody } from '@types';
 import { Request, Response } from 'express';
@@ -21,7 +22,7 @@ export class AuthController {
       res.status(200).json(token);
     } catch (error) {
       console.error('Error signing in:', error);
-      res.status(401).json({ error: 'Invalid credentials' });
+      res.status(401).json({ error: ERROR.INVALID_CREDENTIALS });
     }
   }
 

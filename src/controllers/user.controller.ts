@@ -6,6 +6,7 @@ import {
   UpdateMultipleUsersBody,
   UpdateUserByIdBody,
 } from '@types';
+import { ERROR, SUCCESS } from '@constants';
 
 export class UserController {
   private userService: UserService;
@@ -26,14 +27,14 @@ export class UserController {
     try {
       const users = await this.userService.getAllUsers();
       if (!users || !users.length) {
-        res.status(404).json({ error: 'No users found' });
+        res.status(404).json({ error: ERROR.USERS_NOT_FOUND });
         return;
       }
 
       res.status(200).json(users);
     } catch (error) {
       console.error('Error fetching users:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: ERROR.COMMON });
     }
   }
 
@@ -43,13 +44,13 @@ export class UserController {
 
       const user = await this.userService.getUserById(id);
       if (!user) {
-        res.status(404).json({ error: 'User not found' });
+        res.status(404).json({ error: ERROR.USER_NOT_FOUND });
         return;
       }
       res.status(200).json(user);
     } catch (error) {
       console.error('Error fetching user by ID:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: ERROR.COMMON });
     }
   }
 
@@ -63,7 +64,7 @@ export class UserController {
 
       const user = await this.userService.getUserById(id);
       if (!user) {
-        res.status(404).json({ error: 'User not found' });
+        res.status(404).json({ error: ERROR.USER_NOT_FOUND });
         return;
       }
 
@@ -78,14 +79,14 @@ export class UserController {
       });
 
       if (!updatedUser) {
-        res.status(404).json({ error: 'User not found' });
+        res.status(404).json({ error: ERROR.USER_NOT_FOUND });
         return;
       }
 
-      res.status(200).json({ message: 'User updated successfully' });
+      res.status(200).json({ message: SUCCESS.USER_UPDATE_SUCCESS });
     } catch (error) {
       console.error('Error updating user:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: ERROR.COMMON });
     }
   }
 
@@ -94,9 +95,7 @@ export class UserController {
       const { name, email, password } = req.body;
 
       if (!name || !email || !password) {
-        res
-          .status(400)
-          .json({ error: 'Name, email, and password are required' });
+        res.status(400).json({ error: ERROR.NAME_EMAIL_PASSWORD_REQUIRED });
         return;
       }
 
@@ -108,7 +107,7 @@ export class UserController {
       res.status(201).json(newUser);
     } catch (error) {
       console.error('Error creating user:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: ERROR.COMMON });
     }
   }
 
@@ -125,10 +124,10 @@ export class UserController {
       }
 
       await this.userService.updateMultipleUsers(users);
-      res.status(200).json({ message: 'Users updated successfully' });
+      res.status(200).json({ message: SUCCESS.USERS_UPDATE_SUCCESS });
     } catch (error) {
       console.error('Error updating multiple users:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: ERROR.COMMON });
     }
   }
 
@@ -138,14 +137,14 @@ export class UserController {
 
       const deletedUser = await this.userService.deleteUserById(id);
       if (!deletedUser) {
-        res.status(404).json({ error: 'User not found' });
+        res.status(404).json({ error: ERROR.USER_NOT_FOUND });
         return;
       }
 
-      res.status(200).json({ message: 'User deleted successfully' });
+      res.status(200).json({ message: SUCCESS.USER_DELETE_SUCCESS });
     } catch (error) {
       console.error('Error deleting user:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: ERROR.COMMON });
     }
   }
   async deleteAllUsers(_: Request, res: Response) {
@@ -154,7 +153,7 @@ export class UserController {
       res.status(200).json({ message: 'All users deleted successfully' });
     } catch (error) {
       console.error('Error deleting all users:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: ERROR.COMMON });
     }
   }
 }

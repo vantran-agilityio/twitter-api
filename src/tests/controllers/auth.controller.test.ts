@@ -4,6 +4,7 @@ import { AuthService } from '@services';
 import { SignInBody, SignUpBody } from '@types';
 import { User, UserModel } from '@models';
 import { UserRepository } from '@repositories';
+import { ERROR } from '@constants';
 
 jest.mock('@services', () => {
   return {
@@ -74,7 +75,9 @@ describe('AuthController', () => {
         password: 'wrong-password',
       };
 
-      authService.signIn.mockRejectedValue(new Error('Invalid credentials'));
+      authService.signIn.mockRejectedValue(
+        new Error(ERROR.INVALID_CREDENTIALS),
+      );
 
       await authController.signIn(
         req as Request<object, object, SignInBody>,
@@ -90,7 +93,9 @@ describe('AuthController', () => {
         expect.any(Error),
       );
       expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Invalid credentials' });
+      expect(res.json).toHaveBeenCalledWith({
+        error: ERROR.INVALID_CREDENTIALS,
+      });
     });
   });
 

@@ -1,3 +1,4 @@
+import { ERROR } from '@constants';
 import { PostRepository, UserRepository } from '@repositories';
 import { CreatePostBody, PostBaseBody } from '@types';
 
@@ -21,7 +22,7 @@ export class PostService {
   async createPost(userId: string, postData: CreatePostBody) {
     const user = await this.userRepository.findById(userId);
     if (!user) {
-      throw new Error('User not found');
+      throw new Error(ERROR.USER_NOT_FOUND);
     }
 
     return this.postRepository.create(userId, postData);
@@ -40,7 +41,7 @@ export class PostService {
   async deletePostById(postId: string, userId: string) {
     const user = await this.userRepository.findById(userId);
     if (!user) {
-      throw new Error('User not found');
+      throw new Error(ERROR.USER_NOT_FOUND);
     }
 
     const post = await this.postRepository.findById(postId);

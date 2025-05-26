@@ -3,6 +3,7 @@ import jwt from 'jwt-simple';
 import { UserRepository } from '@repositories';
 import { isPasswordValid } from '@utils';
 import { appConfig } from '@libs';
+import { ERROR } from '@constants';
 
 export class AuthService {
   private userRepository: UserRepository;
@@ -18,7 +19,7 @@ export class AuthService {
 
         return { token: jwt.encode(payload, appConfig.jwtSecret) };
       } else {
-        throw new Error('Invalid credentials');
+        throw new Error(ERROR.INVALID_CREDENTIALS);
       }
     });
   }

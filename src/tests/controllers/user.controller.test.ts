@@ -8,6 +8,7 @@ import {
   UpdateMultipleUsersBody,
   UpdateUserByIdBody,
 } from '@types';
+import { ERROR, SUCCESS } from '@constants';
 
 jest.mock('@services', () => {
   return {
@@ -76,7 +77,7 @@ describe('UserController', () => {
       await userController.fetchUsers(req as Request, res as Response);
 
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ error: 'No users found' });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.USER_NOT_FOUND });
     });
 
     it('should handle errors and return 500 status', async () => {
@@ -85,7 +86,7 @@ describe('UserController', () => {
       await userController.fetchUsers(req as Request, res as Response);
 
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.COMMON });
     });
   });
 
@@ -108,7 +109,7 @@ describe('UserController', () => {
       await userController.fetchUserById(req as Request, res as Response);
 
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ error: 'User not found' });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.USER_NOT_FOUND });
     });
   });
 
@@ -143,7 +144,7 @@ describe('UserController', () => {
 
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({
-        error: 'Name, email, and password are required',
+        error: ERROR.NAME_EMAIL_PASSWORD_REQUIRED,
       });
       expect(userService.createUser).not.toHaveBeenCalled();
     });
@@ -165,7 +166,7 @@ describe('UserController', () => {
       expect(userService.updateUser).toHaveBeenCalledWith('1', req.body);
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
-        message: 'User updated successfully',
+        message: SUCCESS.USER_UPDATE_SUCCESS,
       });
     });
 
@@ -198,7 +199,7 @@ describe('UserController', () => {
       );
 
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ error: 'User not found' });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.USER_NOT_FOUND });
     });
   });
 
@@ -222,7 +223,7 @@ describe('UserController', () => {
       );
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
-        message: 'Users updated successfully',
+        message: SUCCESS.USERS_UPDATE_SUCCESS,
       });
     });
 
@@ -253,7 +254,7 @@ describe('UserController', () => {
       expect(userService.deleteUserById).toHaveBeenCalledWith('1');
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
-        message: 'User deleted successfully',
+        message: SUCCESS.USER_DELETE_SUCCESS,
       });
     });
 
@@ -267,7 +268,7 @@ describe('UserController', () => {
       );
 
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ error: 'User not found' });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.USER_NOT_FOUND });
     });
   });
 
@@ -290,7 +291,7 @@ describe('UserController', () => {
       await userController.deleteAllUsers(req as Request, res as Response);
 
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.COMMON });
     });
   });
 });

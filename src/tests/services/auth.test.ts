@@ -4,6 +4,7 @@ import { UserRepository } from '@repositories';
 import { User, UserModel } from '@models';
 import { isPasswordValid } from '@utils';
 import { appConfig } from '@libs';
+import { ERROR } from '@constants';
 
 jest.mock('jwt-simple', () => ({
   encode: jest.fn(),
@@ -71,7 +72,7 @@ describe('AuthService', () => {
       userRepository.findByEmail.mockResolvedValue(null);
 
       await expect(authService.signIn(email, password)).rejects.toThrow(
-        'Invalid credentials',
+        ERROR.INVALID_CREDENTIALS,
       );
 
       expect(userRepository.findByEmail).toHaveBeenCalledWith(email);
@@ -86,9 +87,8 @@ describe('AuthService', () => {
       userRepository.findByEmail.mockResolvedValue(mockUser);
       (isPasswordValid as jest.Mock).mockReturnValue(false);
 
-      // Act & Assert
       await expect(authService.signIn(email, password)).rejects.toThrow(
-        'Invalid credentials',
+        ERROR.INVALID_CREDENTIALS,
       );
 
       expect(userRepository.findByEmail).toHaveBeenCalledWith(email);

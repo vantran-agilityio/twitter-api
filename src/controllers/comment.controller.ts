@@ -1,3 +1,4 @@
+import { ERROR } from '@constants';
 import { CommentService } from '@services';
 import {
   CommentBaseBody,
@@ -32,7 +33,7 @@ export class CommentController {
       res.status(200).json(comments);
     } catch (error) {
       console.error('Error fetching comments:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: ERROR.COMMON });
     }
   }
 
@@ -52,7 +53,7 @@ export class CommentController {
       res.status(200).json(comment);
     } catch (error) {
       console.error('Error fetching comment by ID:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: ERROR.COMMON });
     }
   }
 
@@ -73,7 +74,7 @@ export class CommentController {
       res.status(201).json(newComment);
     } catch (error) {
       console.error('Error creating comment:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: ERROR.COMMON });
     }
   }
 
@@ -93,7 +94,7 @@ export class CommentController {
       res.status(204).send({ message: 'Comment deleted successfully' });
     } catch (error) {
       console.error('Error deleting comment:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: ERROR.COMMON });
     }
   }
 
@@ -106,7 +107,7 @@ export class CommentController {
       res.status(204).send({ message: 'All comments deleted successfully' });
     } catch (error) {
       console.error('Error deleting all comments:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: ERROR.COMMON });
     }
   }
 }
