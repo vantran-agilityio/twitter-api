@@ -1,3 +1,5 @@
+import 'module-alias/register';
+
 import express from 'express';
 
 import { commentRouter, authRouter, postRouter, userRouter } from '@routes';
