@@ -10,11 +10,6 @@ export class UserRepository {
 
   async findById(id: string) {
     return this.user.findByPk(id);
-    console.log('Finding user by ID:', id);
-
-    return this.user.findOne({
-      where: { id },
-    });
   }
 
   async findByEmail(email: string) {

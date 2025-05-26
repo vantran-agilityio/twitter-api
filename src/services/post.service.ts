@@ -29,6 +29,7 @@ export class PostService {
 
   async updatePost(id: string, postData: PostBaseBody) {
     const post = await this.postRepository.findById(id);
+
     if (!post) {
       throw new Error('Post not found');
     }

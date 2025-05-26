@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { UserController } from '@controllers';
 import { UserService } from '@services';
-import { User } from '@models';
-import { UserModel } from 'models/user.model';
+import { User, UserModel } from '@models';
 import { UserRepository } from '@repositories';
 import {
   GeneralParamsType,
@@ -10,7 +9,6 @@ import {
   UpdateUserByIdBody,
 } from '@types';
 
-// Mock the UserService
 jest.mock('@services', () => {
   return {
     UserService: jest.fn().mockImplementation(() => ({
@@ -139,7 +137,7 @@ describe('UserController', () => {
     });
 
     it('should return 400 when required fields are missing', async () => {
-      req.body = { name: 'New User' }; // Missing email and password
+      req.body = { name: 'New User' };
 
       await userController.createUser(req as Request, res as Response);
 

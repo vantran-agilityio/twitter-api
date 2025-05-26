@@ -31,10 +31,11 @@ async function initializeApp() {
     postRouter({ app, postController });
     commentRouter({ app, commentController });
 
-    app.listen(config.port, () => {
-      console.warn(`⚡️ Server running on port ${config.port}`);
-    });
-
+    if (process.env.NODE_ENV !== 'test') {
+      app.listen(config.port, () => {
+        console.warn(`⚡️ Server running on port ${config.port}`);
+      });
+    }
     swaggerDocs(app);
   } catch (error) {
     console.error('❌ Error initializing application:', error);

@@ -9,7 +9,7 @@
     "start": "node ./dist/server.js",
     "lint": "eslint 'src/**/*.ts'",
     "render-build": "npm install --production=false && npm run lint && npm run build",
-    "test": "jest"
+    "test": "NODE_ENV=test jest"
   },
   "author": "Van Tran",
   "license": "ISC",

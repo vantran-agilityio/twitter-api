@@ -32,7 +32,7 @@ export const configureMiddlewares = (app: express.Application): void => {
     cors({
       origin: [
         'http://localhost:10000',
-        'https://twitter-api-ohjg.onrender.com/',
+        'https://twitter-api-ohjg.onrender.com',
       ],
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],

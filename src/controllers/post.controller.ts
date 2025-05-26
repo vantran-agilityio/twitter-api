@@ -57,6 +57,11 @@ export class PostController {
 
       const postData = req.body;
 
+      if (!postData.title || !postData.description) {
+        res.status(400).json({ error: 'Title and description are required' });
+        return;
+      }
+
       const newPost = await this.postService.createPost(userId, postData);
       res.status(201).json(newPost);
     } catch (error) {
@@ -72,6 +77,11 @@ export class PostController {
     try {
       const { id } = req.params;
       const postData = req.body;
+
+      if (!postData.title || !postData.description) {
+        res.status(400).json({ error: 'Title or description is required' });
+        return;
+      }
 
       const updatedPost = await this.postService.updatePost(id, postData);
       if (!updatedPost) {
