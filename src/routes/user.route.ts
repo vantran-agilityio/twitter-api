@@ -30,14 +30,7 @@ export const userRouter = ({
      *             schema:
      *               type: array
      *               items:
-     *                 type: object
-     *                 properties:
-     *                   id:
-     *                     type: string
-     *                   name:
-     *                     type: string
-     *                   email:
-     *                     type: string
+     *                 $ref: '#/components/schemas/User'
      *       401:
      *         description: Unauthorized - Authentication required
      *       404:
@@ -56,26 +49,14 @@ export const userRouter = ({
      *       content:
      *         application/json:
      *           schema:
-     *             type: object
-     *             required:
-     *               - name
-     *               - email
-     *               - password
-     *             properties:
-     *               name:
-     *                 type: string
-     *                 example: "John Doe"
-     *               email:
-     *                 type: string
-     *                 format: email
-     *                 example: "john@example.com"
-     *               password:
-     *                 type: string
-     *                 format: password
-     *                 example: "securePassword123"
+     *             $ref: '#/components/schemas/CreateUserInput'
      *     responses:
      *       201:
      *         description: User created successfully
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/User'
      *       400:
      *         description: Bad Request - Invalid input
      *       401:
@@ -101,28 +82,22 @@ export const userRouter = ({
      *               users:
      *                 type: array
      *                 items:
-     *                   type: object
-     *                   required:
-     *                     - id
-     *                     - name
-     *                     - email
-     *                   properties:
-     *                     id:
-     *                       type: string
-     *                     name:
-     *                       type: string
-     *                     email:
-     *                       type: string
-     *                       format: email
+     *                   $ref: '#/components/schemas/UserUpdate'
      *     responses:
      *       200:
      *         description: Users updated successfully
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: Users updated successfully
      *       400:
      *         description: Bad Request - Invalid input
      *       401:
      *         description: Unauthorized - Authentication required
-     *       404:
-     *         description: User not found
      *       500:
      *         description: Server Error
      *   delete:
@@ -135,6 +110,14 @@ export const userRouter = ({
      *     responses:
      *       200:
      *         description: All users deleted successfully
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: All users deleted successfully
      *       401:
      *         description: Unauthorized - Authentication required
      *       500:
@@ -171,14 +154,7 @@ export const userRouter = ({
      *         content:
      *           application/json:
      *             schema:
-     *               type: object
-     *               properties:
-     *                 id:
-     *                   type: string
-     *                 name:
-     *                   type: string
-     *                 email:
-     *                   type: string
+     *               $ref: '#/components/schemas/User'
      *       401:
      *         description: Unauthorized - Authentication required
      *       404:
@@ -204,19 +180,18 @@ export const userRouter = ({
      *       content:
      *         application/json:
      *           schema:
-     *             type: object
-     *             required:
-     *               - name
-     *               - email
-     *             properties:
-     *               name:
-     *                 type: string
-     *               email:
-     *                 type: string
-     *                 format: email
+     *             $ref: '#/components/schemas/UpdateUserInput'
      *     responses:
      *       200:
      *         description: User updated successfully
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: User updated successfully
      *       400:
      *         description: Bad Request - Invalid input
      *       401:
@@ -242,6 +217,14 @@ export const userRouter = ({
      *     responses:
      *       200:
      *         description: User deleted successfully
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: User deleted successfully
      *       401:
      *         description: Unauthorized - Authentication required
      *       404:
@@ -254,3 +237,83 @@ export const userRouter = ({
     .put(userController.updateUserById)
     .delete(userController.deleteUserById);
 };
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "123e4567-e89b-12d3-a456-426614174000"
+ *         name:
+ *           type: string
+ *           example: "John Doe"
+ *         email:
+ *           type: string
+ *           format: email
+ *           example: "john@example.com"
+ *       required:
+ *         - id
+ *         - name
+ *         - email
+ *
+ *     CreateUserInput:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           example: "John Doe"
+ *         email:
+ *           type: string
+ *           format: email
+ *           example: "john@example.com"
+ *         password:
+ *           type: string
+ *           format: password
+ *           example: "securePassword123"
+ *       required:
+ *         - name
+ *         - email
+ *         - password
+ *
+ *     UpdateUserInput:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           example: "John Doe"
+ *         email:
+ *           type: string
+ *           format: email
+ *           example: "john@example.com"
+ *       required:
+ *         - name
+ *         - email
+ *
+ *     UserUpdate:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "123e4567-e89b-12d3-a456-426614174000"
+ *         name:
+ *           type: string
+ *           example: "John Doe"
+ *         email:
+ *           type: string
+ *           format: email
+ *           example: "john@example.com"
+ *       required:
+ *         - id
+ *         - name
+ *         - email
+ *
+ *   securitySchemes:
+ *     BearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */

@@ -3,6 +3,64 @@ import express from 'express';
 import { authenticate } from 'auth';
 import { PostController } from '@controllers';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Post:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "123e4567-e89b-12d3-a456-426614174000"
+ *         title:
+ *           type: string
+ *           example: "Sample Post Title"
+ *         description:
+ *           type: string
+ *           example: "This is a sample post description"
+ *         userId:
+ *           type: string
+ *           example: "abc123-user-id"
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *       required:
+ *         - id
+ *         - title
+ *         - description
+ *         - userId
+ *
+ *     CreatePostInput:
+ *       type: object
+ *       required:
+ *         - title
+ *         - description
+ *       properties:
+ *         title:
+ *           type: string
+ *           example: "New Post Title"
+ *         description:
+ *           type: string
+ *           example: "This is a new post description"
+ *
+ *     UpdatePostInput:
+ *       type: object
+ *       required:
+ *         - title
+ *         - description
+ *       properties:
+ *         title:
+ *           type: string
+ *           example: "Updated Post Title"
+ *         description:
+ *           type: string
+ *           example: "This is an updated post description"
+ */
+
 export const postRouter = ({
   app,
   postController,
@@ -30,28 +88,29 @@ export const postRouter = ({
      *             schema:
      *               type: array
      *               items:
-     *                 type: object
-     *                 properties:
-     *                   id:
-     *                     type: string
-     *                   title:
-     *                     type: string
-     *                   description:
-     *                     type: string
-     *                   userId:
-     *                     type: string
-     *                   createdAt:
-     *                     type: string
-     *                     format: date-time
-     *                   updatedAt:
-     *                     type: string
-     *                     format: date-time
+     *                 $ref: '#/components/schemas/Post'
      *       401:
      *         description: Unauthorized - Authentication required
      *       404:
      *         description: No posts found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: "No posts found"
      *       500:
      *         description: Server Error
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: "Internal Server Error"
      *   delete:
      *     tags:
      *       - Posts
@@ -62,10 +121,26 @@ export const postRouter = ({
      *     responses:
      *       200:
      *         description: All posts deleted successfully
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: "All posts deleted successfully"
      *       401:
      *         description: Unauthorized - Authentication required
      *       500:
      *         description: Server Error
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: "Internal Server Error"
      */
     .all(authenticate())
     .get(postController.getPosts)
@@ -96,28 +171,29 @@ export const postRouter = ({
      *         content:
      *           application/json:
      *             schema:
-     *               type: object
-     *               properties:
-     *                 id:
-     *                   type: string
-     *                 title:
-     *                   type: string
-     *                 description:
-     *                   type: string
-     *                 userId:
-     *                   type: string
-     *                 createdAt:
-     *                   type: string
-     *                   format: date-time
-     *                 updatedAt:
-     *                   type: string
-     *                   format: date-time
+     *               $ref: '#/components/schemas/Post'
      *       401:
      *         description: Unauthorized - Authentication required
      *       404:
      *         description: Post not found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: "Post not found"
      *       500:
      *         description: Server Error
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: "Internal Server Error"
      *   put:
      *     tags:
      *       - Posts
@@ -137,28 +213,50 @@ export const postRouter = ({
      *       content:
      *         application/json:
      *           schema:
-     *             type: object
-     *             required:
-     *               - title
-     *               - description
-     *             properties:
-     *               title:
-     *                 type: string
-     *                 example: "Updated Post Title"
-     *               description:
-     *                 type: string
-     *                 example: "This is an updated post description"
+     *             $ref: '#/components/schemas/UpdatePostInput'
      *     responses:
      *       200:
      *         description: Post updated successfully
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: "Post updated successfully"
      *       400:
      *         description: Bad Request - Invalid input
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: "Title or description is required"
      *       401:
      *         description: Unauthorized - Authentication required
      *       404:
      *         description: Post not found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: "Post not found"
      *       500:
      *         description: Server Error
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: "Internal Server Error"
      */
     .all(authenticate())
     .get(postController.getPostById)
@@ -188,17 +286,7 @@ export const postRouter = ({
      *       content:
      *         application/json:
      *           schema:
-     *             type: object
-     *             required:
-     *               - title
-     *               - description
-     *             properties:
-     *               title:
-     *                 type: string
-     *                 example: "New Post Title"
-     *               description:
-     *                 type: string
-     *                 example: "This is a new post description"
+     *             $ref: '#/components/schemas/CreatePostInput'
      *     responses:
      *       201:
      *         description: Post created successfully
@@ -207,33 +295,44 @@ export const postRouter = ({
      *             schema:
      *               type: object
      *               properties:
-     *                 message:
+     *                 id:
      *                   type: string
-     *                 newPost:
-     *                   type: object
-     *                   properties:
-     *                     id:
-     *                       type: string
-     *                     title:
-     *                       type: string
-     *                     description:
-     *                       type: string
-     *                     userId:
-     *                       type: string
-     *                     createdAt:
-     *                       type: string
-     *                       format: date-time
-     *                     updatedAt:
-     *                       type: string
-     *                       format: date-time
+     *                 title:
+     *                   type: string
+     *                 description:
+     *                   type: string
+     *                 userId:
+     *                   type: string
+     *                 createdAt:
+     *                   type: string
+     *                   format: date-time
+     *                 updatedAt:
+     *                   type: string
+     *                   format: date-time
      *       400:
      *         description: Bad Request - Invalid input
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: "Title and description are required"
      *       401:
      *         description: Unauthorized - Authentication required
      *       404:
      *         description: User not found
      *       500:
      *         description: Server Error
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: "Internal Server Error"
      */
     .all(authenticate())
     .post(postController.createPost);
@@ -266,12 +365,36 @@ export const postRouter = ({
      *     responses:
      *       200:
      *         description: Post deleted successfully
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: "Post deleted successfully"
      *       401:
      *         description: Unauthorized - Authentication required
      *       404:
-     *         description: User or post not found
+     *         description: Post not found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: "Post not found"
      *       500:
      *         description: Server Error
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: "Internal Server Error"
      */
     .all(authenticate())
     .delete(postController.deletePostById);

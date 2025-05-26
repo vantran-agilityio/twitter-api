@@ -3,6 +3,65 @@ import express from 'express';
 import { authenticate } from 'auth';
 import { CommentController } from '@controllers';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Comment:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "123e4567-e89b-12d3-a456-426614174000"
+ *         content:
+ *           type: string
+ *           example: "This is a great post!"
+ *         userId:
+ *           type: string
+ *           example: "abc123-user-id"
+ *         postId:
+ *           type: string
+ *           example: "def456-post-id"
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *       required:
+ *         - id
+ *         - content
+ *         - userId
+ *         - postId
+ *
+ *     CreateCommentInput:
+ *       type: object
+ *       required:
+ *         - content
+ *         - userId
+ *       properties:
+ *         content:
+ *           type: string
+ *           example: "This is a great post!"
+ *         userId:
+ *           type: string
+ *           example: "abc123-user-id"
+ *
+ *     CommentResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           example: "Comment operation successful"
+ *
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           example: "Error message"
+ */
+
 export const commentRouter = ({
   app,
   commentController,
@@ -37,25 +96,21 @@ export const commentRouter = ({
      *             schema:
      *               type: array
      *               items:
-     *                 type: object
-     *                 properties:
-     *                   id:
-     *                     type: string
-     *                   content:
-     *                     type: string
-     *                   userId:
-     *                     type: string
-     *                   postId:
-     *                     type: string
-     *                   createdAt:
-     *                     type: string
-     *                     format: date-time
+     *                 $ref: '#/components/schemas/Comment'
      *       401:
      *         description: Unauthorized - Authentication required
      *       404:
-     *         description: Not Found - Post not found
+     *         description: Not Found - Post not found or no comments found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ErrorResponse'
      *       500:
      *         description: Server Error
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ErrorResponse'
      *   post:
      *     tags:
      *       - Comments
@@ -75,13 +130,7 @@ export const commentRouter = ({
      *       content:
      *         application/json:
      *           schema:
-     *             type: object
-     *             required:
-     *               - content
-     *             properties:
-     *               content:
-     *                 type: string
-     *                 example: "This is a great post!"
+     *             $ref: '#/components/schemas/CreateCommentInput'
      *     responses:
      *       201:
      *         description: Comment created successfully
@@ -90,25 +139,31 @@ export const commentRouter = ({
      *             schema:
      *               type: object
      *               properties:
-     *                 id:
+     *                 message:
      *                   type: string
-     *                 content:
-     *                   type: string
-     *                 userId:
-     *                   type: string
-     *                 postId:
-     *                   type: string
-     *                 createdAt:
-     *                   type: string
-     *                   format: date-time
+     *                   example: "Comment created successfully"
+     *                 newComment:
+     *                   $ref: '#/components/schemas/Comment'
      *       400:
      *         description: Bad Request - Invalid input
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ErrorResponse'
      *       401:
      *         description: Unauthorized - Authentication required
      *       404:
      *         description: Not Found - Post not found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ErrorResponse'
      *       500:
      *         description: Server Error
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ErrorResponse'
      *   delete:
      *     tags:
      *       - Comments
@@ -126,12 +181,28 @@ export const commentRouter = ({
      *     responses:
      *       200:
      *         description: All comments deleted successfully
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: "All comments for this post deleted successfully"
      *       401:
      *         description: Unauthorized - Authentication required
      *       404:
      *         description: Not Found - Post not found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ErrorResponse'
      *       500:
      *         description: Server Error
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ErrorResponse'
      */
     .all(authenticate())
     .get(commentController.fetchComments)
@@ -169,25 +240,21 @@ export const commentRouter = ({
      *         content:
      *           application/json:
      *             schema:
-     *               type: object
-     *               properties:
-     *                 id:
-     *                   type: string
-     *                 content:
-     *                   type: string
-     *                 userId:
-     *                   type: string
-     *                 postId:
-     *                   type: string
-     *                 createdAt:
-     *                   type: string
-     *                   format: date-time
+     *               $ref: '#/components/schemas/Comment'
      *       401:
      *         description: Unauthorized - Authentication required
      *       404:
      *         description: Not Found - Comment or post not found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ErrorResponse'
      *       500:
      *         description: Server Error
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ErrorResponse'
      *   delete:
      *     tags:
      *       - Comments
@@ -211,14 +278,28 @@ export const commentRouter = ({
      *     responses:
      *       200:
      *         description: Comment deleted successfully
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: "Comment deleted successfully"
      *       401:
      *         description: Unauthorized - Authentication required
-     *       403:
-     *         description: Forbidden - User doesn't have permission
      *       404:
      *         description: Not Found - Comment or post not found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ErrorResponse'
      *       500:
      *         description: Server Error
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/ErrorResponse'
      */
     .all(authenticate())
     .get(commentController.fetchCommentById)
