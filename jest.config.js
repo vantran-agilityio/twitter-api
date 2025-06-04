@@ -13,5 +13,6 @@ module.exports = {
     '^@middlewares(.*)$': '<rootDir>/src/middlewares$1',
     '^@routes(.*)$': '<rootDir>/src/routes$1',
     '^@utils(.*)$': '<rootDir>/src/utils$1',
+    '^@constants(.*)$': '<rootDir>/src/constants$1',
   },
 };

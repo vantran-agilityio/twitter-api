@@ -77,7 +77,7 @@ describe('UserController', () => {
       await userController.fetchUsers(req as Request, res as Response);
 
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ error: ERROR.USER_NOT_FOUND });
+      expect(res.json).toHaveBeenCalledWith({ error: ERROR.USERS_NOT_FOUND });
     });
 
     it('should handle errors and return 500 status', async () => {
