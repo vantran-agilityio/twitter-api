@@ -1,56 +1,12 @@
 import express from 'express';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
+import swaggerUI from 'swagger-ui-express';
 import path from 'path';
-import swaggerJSDoc from 'swagger-jsdoc';
+import YAML from 'yamljs';
 
-const options: swaggerJSDoc.Options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Twitter API',
-      description:
-        'API endpoints for a social media services documented on swagger',
-      contact: {
-        name: 'Van Tran',
-        email: 'van.tran@asnet.com.vn',
-        url: 'https://github.com/vantran-agilityio/twitter-api',
-      },
-      version: '1.0.0',
-    },
-    servers: [
-      {
-        url: 'http://localhost:10000',
-        description: 'Local server',
-      },
-      {
-        url: 'https://twitter-api-ohjg.onrender.com',
-        description: 'Live server',
-      },
-    ],
-    components: {
-      securitySchemes: {
-        BearerAuth: {
-          type: 'http',
-          scheme: 'Bearer',
-          bearerFormat: 'JWT',
-        },
-      },
-    },
-  },
-
-  apis: [path.join(__dirname, 'routes/**/*.ts')],
-};
-
-const swaggerSpec = swaggerJsdoc(options);
+const swaggerDocument = YAML.load(path.join(__dirname, '../swagger.yaml'));
 
 const swaggerDocs = (app: express.Application) => {
-  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-  app.get('/docs.json', (_, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(swaggerSpec);
-  });
+  app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 };
 
 export default swaggerDocs;
