@@ -23,3 +23,11 @@ COPY package*.json ./
 RUN npm install --production
 COPY --from=builder /app/dist ./dist
 CMD ["node", "dist/server.js"]
+
+# Test stage
+FROM base AS test
+WORKDIR /app
+ENV NODE_ENV=test
+RUN npm ci --include=dev
+COPY . .
+CMD ["npm", "test"]
