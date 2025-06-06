@@ -6,11 +6,11 @@ info:
   contact:
     name: 'Van Tran'
     email: 'van.tran@asnet.com.vn'
-    url: 'https://github.com/vantran-agilityio/twitter-api'
+    url: 'https://github.com/vantran-agilityio'
 servers:
   - url: http://localhost:3000
     description: Local development server
-  - url: 'https://twitter-api-ohjg.onrender.com'
+  - url: 'https://twitter-api-latest.onrender.com'
     description: 'Live server'
 paths:
   /signup:
