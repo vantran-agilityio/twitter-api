@@ -49,3 +49,10 @@ jobs:
           push: true
           target: prod
           tags: ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+
+      - name: Trigger Render deployment
+        if: github.ref == 'refs/heads/main'
+        env:
+          deploy_url: ${{secrets.RENDER_DEPLOY_HOOK_URL}}
+        run: |
+          curl "$deploy_url"
